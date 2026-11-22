@@ -1,69 +1,186 @@
-import Image from "next/image";
+const GITHUB = "https://github.com/elshanmammadoov";
+const LINKEDIN = "https://linkedin.com/in/elshanmammadoov";
+const WPSCAN =
+  "https://wpscan.com/vulnerability/119477bd-1b29-4e33-9040-38cb6f0ae623";
+
+const nav = [
+  { label: "About", href: "#about" },
+  { label: "Ventures", href: "#ventures" },
+  { label: "Research", href: "#research" },
+  { label: "Contact", href: "#contact" },
+];
+
+const ventures = [
+  {
+    name: "Qarabug",
+    role: "Security Researcher (Contract)",
+    text: "Conducting authorized web application penetration testing, vulnerability validation, and responsible disclosure.",
+  },
+  {
+    name: "BINGO MMC",
+    role: "Co-Founder & COO",
+    text: "Leading operations, field logistics, and workflow automation for a subscription-based residential waste collection service in Baku.",
+  },
+  {
+    name: "Qarabagh Estate",
+    role: "Founder",
+    text: "Managing real estate marketing and AI-assisted property listing workflows across Baku and Sumgayit.",
+  },
+];
+
+const stack = [
+  "Burp Suite Pro",
+  "Impacket",
+  "NetExec",
+  "Linux",
+  "Python",
+  "Next.js",
+  "TypeScript",
+  "Tailwind CSS",
+];
+
+const link =
+  "text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-muted";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <>
+      <header className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur">
+        <nav
+          aria-label="Primary"
+          className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6"
+        >
+          <a href="#about" className="text-sm font-medium tracking-wide">
+            EM
+          </a>
+          <ul className="flex gap-5 text-sm text-muted sm:gap-8">
+            {nav.map((n) => (
+              <li key={n.href}>
+                <a
+                  href={n.href}
+                  className="transition-colors hover:text-foreground"
+                >
+                  {n.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6">
+        <section id="about" className="scroll-mt-14 py-24 sm:py-40">
+          <p className="text-sm text-muted">Baku, Azerbaijan</p>
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-7xl">
+            ELSHAN MAMMADOV
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-4 text-xl text-foreground sm:text-3xl">
+            Security Researcher &amp; Tech Founder
+          </p>
+          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            Focused on offensive web security, vulnerability research, and
+            building scalable, technology-driven ventures in Baku.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            <a href={GITHUB} className={link}>
+              GitHub
+            </a>
+            <a href={LINKEDIN} className={link}>
+              LinkedIn
+            </a>
+            <a href="#contact" className={link}>
+              Contact
+            </a>
+          </div>
+        </section>
+
+        <section
+          id="ventures"
+          className="scroll-mt-14 border-t border-border py-20 sm:py-28"
+        >
+          <h2 className="text-sm text-muted">Ventures &amp; Leadership</h2>
+          <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
+            {ventures.map((v) => (
+              <article key={v.name} className="bg-background p-8">
+                <h3 className="text-xl font-medium tracking-tight">
+                  {v.name}
+                </h3>
+                <p className="mt-1 text-sm text-muted">{v.role}</p>
+                <p className="mt-6 text-sm leading-relaxed text-muted">
+                  {v.text}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="research"
+          className="scroll-mt-14 border-t border-border py-20 sm:py-28"
+        >
+          <h2 className="text-sm text-muted">
+            Security Research &amp; Engineering
+          </h2>
+          <dl className="mt-10 divide-y divide-border border-y border-border">
+            <div className="grid gap-2 py-8 md:grid-cols-3 md:gap-8">
+              <dt className="font-medium">Vulnerability Disclosure</dt>
+              <dd className="leading-relaxed text-muted md:col-span-2">
+                Published WordPress plugin security advisory on{" "}
+                <a href={WPSCAN} className={link}>
+                  WPScan
+                </a>{" "}
+                (119477bd-1b29-4e33-9040-38cb6f0ae623).
+              </dd>
+            </div>
+            <div className="grid gap-2 py-8 md:grid-cols-3 md:gap-8">
+              <dt className="font-medium">Custom Security Tooling</dt>
+              <dd className="leading-relaxed text-muted md:col-span-2">
+                ZeroDayHunter, cvehunter, and xssscanner — automated static
+                analysis and vulnerability discovery tools built with Python,
+                Semgrep, and Node.js.
+              </dd>
+            </div>
+            <div className="grid gap-2 py-8 md:grid-cols-3 md:gap-8">
+              <dt className="font-medium">Technical Stack</dt>
+              <dd className="leading-relaxed text-muted md:col-span-2">
+                {stack.join(" · ")}
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section
+          id="contact"
+          className="scroll-mt-14 border-t border-border py-20 sm:py-28"
+        >
+          <h2 className="text-sm text-muted">Contact</h2>
+          <p className="mt-6 max-w-xl text-lg text-foreground sm:text-2xl">
+            Open to security engagements and conversations about new ventures.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            <a href={LINKEDIN} className={link}>
+              LinkedIn
+            </a>
+            <a href={GITHUB} className={link}>
+              GitHub
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 Elshan Mammadov • Baku, Azerbaijan</p>
+          <p className="flex flex-wrap gap-x-6 gap-y-2">
+            <a href={GITHUB} className="hover:text-foreground">
+              github.com/elshanmammadoov
+            </a>
+            <a href={LINKEDIN} className="hover:text-foreground">
+              linkedin.com/in/elshanmammadoov
+            </a>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </footer>
+    </>
   );
 }

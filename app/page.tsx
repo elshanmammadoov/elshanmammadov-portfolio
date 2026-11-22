@@ -5,7 +5,9 @@ import {
   MotionConfig,
   useMotionTemplate,
   useMotionValue,
+  useScroll,
   useSpring,
+  useTransform,
   type Variants,
 } from "framer-motion";
 import {
@@ -37,11 +39,13 @@ const LINKEDIN = "https://linkedin.com/in/elshanmammadoov";
 const WPSCAN =
   "https://wpscan.com/vulnerability/119477bd-1b29-4e33-9040-38cb6f0ae623";
 const EASE = [0.22, 1, 0.36, 1] as const;
+const SPRING = { type: "spring", stiffness: 500, damping: 30 } as const;
+const TAP = { scale: 0.98 } as const;
 
 const nav = [
   { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
-  { label: "Projects & Research", href: "#projects" },
+  { label: "Projects", href: "#projects" },
   { label: "Credentials", href: "#credentials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -214,9 +218,10 @@ function SpotlightCard({
     <motion.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, ease: EASE, delay }}
       whileHover={{ y: -4 }}
+      whileTap={TAP}
       onMouseMove={onMove}
       onMouseLeave={() => {
         x.set(-400);
@@ -224,6 +229,18 @@ function SpotlightCard({
       }}
       className={`group relative overflow-hidden rounded-3xl bg-[#1c1d21] p-px ${className}`}
     >
+      {/* viewport-active border illumination (touch + desktop) */}
+      <motion.div
+        aria-hidden
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 0.35 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 1.1, ease: EASE, delay: delay + 0.15 }}
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `linear-gradient(160deg, rgba(${accent},0.6), transparent 55%)`,
+        }}
+      />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -258,13 +275,13 @@ function SectionHeading({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, ease: EASE }}
-      className="mb-14"
+      className="mb-10 md:mb-14"
     >
       <div className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-[#86868b]">
         <Icon size={14} strokeWidth={1.75} />
         {eyebrow}
       </div>
-      <h2 className="text-3xl font-semibold tracking-tight text-[#f5f5f7] md:text-5xl">
+      <h2 className="text-3xl font-semibold tracking-tight text-[#f5f5f7] sm:text-4xl md:text-5xl">
         {title}
       </h2>
     </motion.div>
@@ -273,9 +290,13 @@ function SectionHeading({
 
 function Chip({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm text-[#c7c7cc] transition-colors hover:border-white/25 hover:text-[#f5f5f7]">
+    <motion.span
+      whileTap={TAP}
+      transition={SPRING}
+      className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-[#c7c7cc] transition-colors hover:border-white/25 hover:text-[#f5f5f7] sm:text-sm"
+    >
       {children}
-    </span>
+    </motion.span>
   );
 }
 
@@ -298,9 +319,36 @@ function CursorSpotlight() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-0"
+      className="pointer-events-none fixed inset-0 z-0 hidden pointer-fine:block"
       style={{ background }}
     />
+  );
+}
+
+function ScrollEffects() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 28,
+    restDelta: 0.001,
+  });
+  const glowY = useTransform(scrollYProgress, [0, 1], ["-10vh", "55vh"]);
+  const glowX = useTransform(scrollYProgress, [0, 0.5, 1], ["-8vw", "12vw", "-4vw"]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.7, 1, 0.7]);
+
+  return (
+    <>
+      <motion.div
+        aria-hidden
+        className="fixed inset-x-0 top-0 z-[60] h-px origin-left bg-gradient-to-r from-[#d6465c] via-[#f5f5f7] to-[#9a9aa0]"
+        style={{ scaleX }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none fixed left-1/2 top-0 z-0 h-[60vh] w-[110vw] max-w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(214,70,92,0.12),rgba(245,245,247,0.04)_55%,transparent)] blur-2xl"
+        style={{ y: glowY, x: glowX, opacity: glowOpacity }}
+      />
+    </>
   );
 }
 
@@ -310,20 +358,22 @@ function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: EASE }}
-      className="sticky top-4 z-50 mx-auto w-full max-w-6xl px-4 md:px-6"
+      className="sticky top-3 z-50 mx-auto w-full max-w-6xl px-3 sm:top-4 sm:px-6"
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#101113]/75 p-1.5 backdrop-blur-md [scrollbar-width:none]"
+        className="mx-auto flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#101113]/80 p-1 backdrop-blur-md sm:p-1.5 [scrollbar-width:none]"
       >
         {nav.map((n) => (
-          <a
+          <motion.a
             key={n.href}
             href={n.href}
-            className="whitespace-nowrap rounded-full px-3.5 py-2 text-sm text-[#86868b] transition-colors hover:bg-white/[0.07] hover:text-[#f5f5f7]"
+            whileTap={TAP}
+            transition={SPRING}
+            className="whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs text-[#86868b] transition-colors hover:bg-white/[0.07] hover:text-[#f5f5f7] sm:px-3.5 sm:py-2 sm:text-sm"
           >
             {n.label}
-          </a>
+          </motion.a>
         ))}
       </nav>
     </motion.header>
@@ -345,7 +395,8 @@ function ButtonLink({
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       whileHover={{ y: -2, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={TAP}
+      transition={SPRING}
       className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors ${
         primary
           ? "bg-[#f5f5f7] text-[#101113] hover:bg-white"
@@ -361,13 +412,14 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="relative min-h-screen overflow-x-clip bg-[#101113] text-[#f5f5f7]">
+        <ScrollEffects />
         <CursorSpotlight />
         <Navbar />
 
         {/* HERO */}
         <section
           id="about"
-          className="relative z-10 scroll-mt-24 px-6 pb-24 pt-24 md:pb-32 md:pt-32"
+          className="relative z-10 scroll-mt-24 px-5 pb-20 pt-24 sm:px-8 md:pb-32 md:pt-32"
         >
           <div
             aria-hidden
@@ -381,7 +433,7 @@ export default function Home() {
           >
             <motion.div
               variants={fadeUp}
-              className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#c7c7cc]"
+              className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs text-[#c7c7cc] sm:px-4 sm:text-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8e2d6] opacity-60" />
@@ -400,14 +452,14 @@ export default function Home() {
 
             <motion.h1
               variants={fadeUp}
-              className="mt-5 max-w-5xl bg-gradient-to-b from-[#f5f5f7] to-[#9a9aa0] bg-clip-text text-5xl font-semibold leading-[1.05] tracking-tight text-transparent md:text-7xl"
+              className="mt-5 max-w-5xl bg-gradient-to-b from-[#f5f5f7] to-[#9a9aa0] bg-clip-text text-4xl font-semibold leading-[1.08] tracking-tight text-transparent sm:text-6xl md:text-7xl"
             >
               Red Team Specialist & Vulnerability Researcher
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
-              className="mt-8 max-w-3xl text-lg leading-relaxed text-[#86868b] md:text-xl"
+              className="mt-6 max-w-3xl text-base leading-relaxed text-[#86868b] sm:mt-8 sm:text-lg md:text-xl"
             >
               Entrepreneur & Security Researcher focused on offensive web
               security, AI automation, and building technology-driven ventures
@@ -437,13 +489,13 @@ export default function Home() {
                 aria-hidden
                 className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[#b3243d]/20 blur-3xl"
               />
-              <div className="relative grid gap-10 p-8 md:grid-cols-[1.6fr_1fr] md:p-14">
+              <div className="relative grid gap-8 p-6 sm:p-8 md:grid-cols-[1.6fr_1fr] md:gap-10 md:p-14">
                 <div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-[#d6465c]/30 bg-[#d6465c]/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.14em] text-[#f0a3af]">
+                  <span className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-[#d6465c]/30 bg-[#d6465c]/10 px-3.5 py-1.5 text-[10px] font-medium tracking-[0.12em] text-[#f0a3af] sm:text-xs sm:tracking-[0.14em]">
                     <ShieldAlert size={14} />
                     VULNERABILITY DISCLOSURE • WPSCAN DATABASE
                   </span>
-                  <h2 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl">
+                  <h2 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-6xl">
                     CVE-2026-118783
                   </h2>
                   <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#86868b]">
@@ -451,17 +503,20 @@ export default function Home() {
                     plugin security vulnerability with full Proof-of-Concept
                     (PoC), published in the WPScan Vulnerability Database.
                   </p>
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={TAP}
+                    transition={SPRING}
                     href={WPSCAN}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-6 py-3 text-sm font-medium text-[#101113] transition-transform hover:scale-[1.03]"
+                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-6 py-3 text-sm font-medium text-[#101113]"
                   >
                     View on WPScan <ArrowUpRight size={16} />
-                  </a>
+                  </motion.a>
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="relative flex h-44 w-44 items-center justify-center rounded-full border border-[#d6465c]/25 md:h-56 md:w-56">
+                  <div className="relative flex h-36 w-36 items-center justify-center rounded-full border border-[#d6465c]/25 sm:h-44 sm:w-44 md:h-56 md:w-56">
                     <div className="absolute inset-4 rounded-full border border-white/10" />
                     <div className="absolute inset-9 rounded-full border border-white/5" />
                     <Bug
@@ -479,7 +534,7 @@ export default function Home() {
         {/* EXPERIENCE */}
         <section
           id="experience"
-          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 md:py-32"
         >
           <SectionHeading
             eyebrow="Ventures & Experience"
@@ -492,7 +547,7 @@ export default function Home() {
                 key={e.name}
                 className={e.className}
                 delay={(i % 2) * 0.1}
-                innerClassName="p-8 md:p-10"
+                innerClassName="p-6 sm:p-8 md:p-10"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
@@ -527,7 +582,7 @@ export default function Home() {
         {/* PROJECTS & RESEARCH */}
         <section
           id="projects"
-          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 md:py-32"
         >
           <SectionHeading
             eyebrow="Security Engineering & AI"
@@ -535,7 +590,7 @@ export default function Home() {
             icon={Cpu}
           />
           <div className="grid gap-5 md:grid-cols-2">
-            <SpotlightCard innerClassName="p-8 md:p-10">
+            <SpotlightCard innerClassName="p-6 sm:p-8 md:p-10">
               <Radar size={26} strokeWidth={1.5} />
               <h3 className="mt-8 text-2xl font-semibold tracking-tight">
                 AI Vehicle Speed & Traffic Radar
@@ -553,7 +608,7 @@ export default function Home() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard delay={0.1} innerClassName="p-8 md:p-10">
+            <SpotlightCard delay={0.1} innerClassName="p-6 sm:p-8 md:p-10">
               <Wrench size={26} strokeWidth={1.5} />
               <h3 className="mt-8 text-2xl font-semibold tracking-tight">
                 Custom Offensive Security Tooling
@@ -578,7 +633,7 @@ export default function Home() {
             <SpotlightCard
               className="md:col-span-2"
               delay={0.05}
-              innerClassName="p-8 md:p-10"
+              innerClassName="p-6 sm:p-8 md:p-10"
             >
               <div className="flex items-center gap-3">
                 <ShieldCheck size={26} strokeWidth={1.5} />
@@ -628,7 +683,7 @@ export default function Home() {
         {/* CREDENTIALS */}
         <section
           id="credentials"
-          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 md:py-32"
         >
           <SectionHeading
             eyebrow="Education, Certifications & Volunteering"
@@ -693,15 +748,15 @@ export default function Home() {
         {/* CONTACT */}
         <section
           id="contact"
-          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 md:py-32"
         >
           <SpotlightCard innerClassName="overflow-hidden">
             <div
               aria-hidden
               className="bg-dots pointer-events-none absolute inset-0 opacity-60"
             />
-            <div className="relative px-8 py-16 text-center md:px-16 md:py-24">
-              <h2 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl">
+            <div className="relative px-6 py-14 text-center sm:px-8 md:px-16 md:py-24">
+              <h2 className="mx-auto max-w-3xl text-3xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
                 Let&apos;s build something secure.
               </h2>
               <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#86868b]">
@@ -721,7 +776,7 @@ export default function Home() {
         </section>
 
         {/* FOOTER */}
-        <footer className="relative z-10 border-t border-[#1c1d21] px-6 py-12">
+        <footer className="relative z-10 border-t border-[#1c1d21] px-5 py-12 sm:px-8">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 text-sm text-[#86868b] md:flex-row md:items-center md:justify-between">
             <p>© 2026 Elshan Mammadov • Baku, Azerbaijan</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -731,15 +786,17 @@ export default function Home() {
                 ["github.com/elshanmammadoov", GITHUB],
                 ["linkedin.com/in/elshanmammadoov", LINKEDIN],
               ].map(([label, href]) => (
-                <a
+                <motion.a
                   key={href}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  whileTap={TAP}
+                  transition={SPRING}
                   className="transition-colors hover:text-[#f5f5f7]"
                 >
                   {label}
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>

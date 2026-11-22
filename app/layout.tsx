@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://elshanmammadov.vercel.app"),
-  title: "Elshan Mammadov — Security Researcher & Tech Founder",
+  title: "Elshan Mammadov — Red Team Specialist & Vulnerability Researcher",
   description:
-    "Security researcher and tech founder in Baku focused on offensive web security, vulnerability research, and scalable, technology-driven ventures.",
+    "Entrepreneur & security researcher in Baku focused on offensive web security, AI automation, and technology-driven ventures.",
   openGraph: {
-    title: "Elshan Mammadov — Security Researcher & Tech Founder",
+    title: "Elshan Mammadov — Red Team Specialist & Vulnerability Researcher",
     description:
       "Offensive web security, vulnerability research, and technology-driven ventures in Baku.",
     url: "https://elshanmammadov.vercel.app",

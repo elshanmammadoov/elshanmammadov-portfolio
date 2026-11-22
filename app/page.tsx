@@ -11,109 +11,198 @@ import {
 import {
   ArrowRight,
   ArrowUpRight,
+  Award,
+  BadgeCheck,
+  Briefcase,
   Bug,
   Building2,
+  Cpu,
+  GraduationCap,
+  HandHeart,
   Home as HomeIcon,
-  Layers,
   Mail,
   MapPin,
   Radar,
+  ShieldAlert,
   ShieldCheck,
   Terminal,
   Trash2,
+  Wrench,
+  type LucideIcon,
 } from "lucide-react";
-import { useRef, type MouseEvent, type ReactNode } from "react";
+import { useEffect, type MouseEvent, type ReactNode } from "react";
 
 const GITHUB = "https://github.com/elshanmammadoov";
 const LINKEDIN = "https://linkedin.com/in/elshanmammadoov";
 const WPSCAN =
   "https://wpscan.com/vulnerability/119477bd-1b29-4e33-9040-38cb6f0ae623";
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const nav = [
   { label: "About", href: "#about" },
-  { label: "Ventures", href: "#ventures" },
-  { label: "Research", href: "#research" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects & Research", href: "#projects" },
+  { label: "Credentials", href: "#credentials" },
   { label: "Contact", href: "#contact" },
 ];
 
-const ventures = [
+const experience: {
+  name: string;
+  role: string;
+  period: string;
+  icon: LucideIcon;
+  text: string;
+  link?: { label: string; href: string };
+  className: string;
+}[] = [
   {
     name: "Qarabug",
     role: "Security Researcher (Contract)",
-    tags: ["Pentesting", "Disclosure"],
+    period: "Nov 2026 – Present",
     icon: ShieldCheck,
-    text: "Conducting authorized web application penetration testing, vulnerability validation, and responsible disclosure.",
-    className: "md:col-span-2 md:row-span-2",
-    featured: true,
+    text: "Conducting authorized security assessments, web application penetration testing, and responsible vulnerability validation.",
+    className: "md:col-span-3",
   },
   {
     name: "BINGO MMC",
     role: "Co-Founder & COO",
-    tags: ["Operations", "Automation"],
+    period: "Nov 2026 – Present",
     icon: Trash2,
-    text: "Leading operations, field logistics, and workflow automation for a subscription-based residential waste collection service in Baku.",
-    className: "",
-    featured: false,
+    text: "Leading operational execution, field logistics, customer acquisition, and workflow automation for a subscription-based residential waste collection service in Baku.",
+    link: { label: "bingoapp.az", href: "https://bingoapp.az" },
+    className: "md:col-span-3",
   },
   {
     name: "Qarabagh Estate",
     role: "Founder",
-    tags: ["Real Estate", "AI Workflows"],
+    period: "Aug 2023 – Present",
     icon: HomeIcon,
-    text: "Managing real estate marketing and AI-assisted property listing workflows across Baku and Sumgayit.",
-    className: "",
-    featured: false,
+    text: "Founded and leading a real estate venture focused on digital property-listing workflows, lead generation, and AI-assisted operations across Baku and Sumgait.",
+    link: { label: "qarabaghestate.az", href: "https://qarabaghestate.az" },
+    className: "md:col-span-3",
+  },
+  {
+    name: "Ecosphere LLC",
+    role: "IT Infrastructure & Systems Specialist (Contract)",
+    period: "Sep 2026 – Nov 2026",
+    icon: Building2,
+    text: "Maintained and optimized IT infrastructure, hardware systems, and network administration.",
+    className: "md:col-span-3",
+  },
+];
+
+const education = [
+  {
+    name: "Baki Biznes Universiteti",
+    role: "Bachelor's degree, Business Administration and Management",
+    period: "Sep 2023 – Jun 2027 • Cybersecurity Club",
+    icon: GraduationCap,
+  },
+  {
+    name: "MilliSec",
+    role: "Intensive Cyber Security Training Program",
+    period: "Feb 2026 – Nov 2026",
+    icon: ShieldCheck,
+  },
+  {
+    name: "OLYMPIC GLOBAL SERVICE",
+    role: "Volunteer Staff",
+    period: "Oct 2023 – Feb 2024",
+    icon: HandHeart,
+  },
+];
+
+const certs: { name: string; issuer: string; date: string; id?: string }[] = [
+  {
+    name: "Claude Academy: Claude Code 101",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    id: "43c5a255cd2dce6ebe3e44cd127e54e3",
+  },
+  {
+    name: "Claude Academy: Introduction to Model Context Protocol (MCP)",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    id: "c8a7152f8e50e5e494f4e521884e2a1d",
+  },
+  { name: "Introduction to Cybersecurity", issuer: "Cisco", date: "Sep 2026" },
+  {
+    name: "Pre Security Certificate",
+    issuer: "TryHackMe",
+    date: "Jun 2026",
+    id: "THM-UDNOZPMEMU",
+  },
+  {
+    name: "Pre Security (Legacy) Certificate",
+    issuer: "TryHackMe",
+    date: "May 2026",
+    id: "THM-YG1SU8X4VH",
+  },
+  { name: "CCNA Training Certificate", issuer: "Uğur IT Academy", date: "May 2026" },
+  {
+    name: "Foundation in Computer Systems & IT Fundamentals",
+    issuer: "Udemy",
+    date: "Jan 2026",
   },
 ];
 
 const tools = ["ZeroDayHunter", "cvehunter", "xssscanner"];
 
+const domains = [
+  "Vulnerability Research & Responsible Disclosure",
+  "Web Application Penetration Testing",
+  "Red Teaming & Active Directory / Linux & Windows Privilege Escalation",
+];
+
 const stack = [
-  "Burp Suite Pro",
-  "Impacket",
-  "NetExec",
+  "Burp Suite",
+  "Nmap",
+  "Wireshark",
+  "Metasploit",
   "Linux",
   "Python",
+  "Node.js",
+  "Bash",
+  "Git",
   "Next.js",
-  "TypeScript",
-  "Tailwind CSS",
+];
+
+const platforms = [
+  "Qarabug",
+  "Bugcrowd",
+  "PortSwigger Web Security Academy",
+  "TryHackMe",
+  "Hack The Box",
 ];
 
 const container: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.11, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
 };
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE } },
 };
-
-const reveal = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-} as const;
 
 /** Card with a border + surface glow that follows the cursor. */
 function SpotlightCard({
   children,
   className = "",
   delay = 0,
+  accent = "245,245,247",
+  innerClassName = "",
 }: {
   children: ReactNode;
   className?: string;
+  innerClassName?: string;
   delay?: number;
+  accent?: string;
 }) {
-  const x = useMotionValue(-300);
-  const y = useMotionValue(-300);
-  const background = useMotionTemplate`radial-gradient(360px circle at ${x}px ${y}px, rgba(232,226,214,0.13), transparent 70%)`;
-  const border = useMotionTemplate`radial-gradient(260px circle at ${x}px ${y}px, rgba(232,226,214,0.55), transparent 70%)`;
+  const x = useMotionValue(-400);
+  const y = useMotionValue(-400);
+  const glow = useMotionTemplate`radial-gradient(420px circle at ${x}px ${y}px, rgba(${accent},0.09), transparent 70%)`;
+  const edge = useMotionTemplate`radial-gradient(300px circle at ${x}px ${y}px, rgba(${accent},0.5), transparent 70%)`;
 
   function onMove(e: MouseEvent<HTMLDivElement>) {
     const r = e.currentTarget.getBoundingClientRect();
@@ -123,26 +212,30 @@ function SpotlightCard({
 
   return (
     <motion.div
-      {...reveal}
-      transition={{ ...reveal.transition, delay }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: EASE, delay }}
       whileHover={{ y: -4 }}
       onMouseMove={onMove}
       onMouseLeave={() => {
-        x.set(-300);
-        y.set(-300);
+        x.set(-400);
+        y.set(-400);
       }}
-      className={`group relative overflow-hidden rounded-2xl bg-white/[0.07] p-px ${className}`}
+      className={`group relative overflow-hidden rounded-3xl bg-[#1c1d21] p-px ${className}`}
     >
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: border }}
+        style={{ background: edge }}
       />
-      <div className="relative h-full rounded-[15px] bg-[#131417]">
+      <div
+        className={`relative h-full rounded-[calc(1.5rem-1px)] bg-[#131417] ${innerClassName}`}
+      >
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[15px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{ background }}
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: glow }}
         />
         <div className="relative h-full">{children}</div>
       </div>
@@ -150,22 +243,64 @@ function SpotlightCard({
   );
 }
 
-function Eyebrow({ children }: { children: ReactNode }) {
+function SectionHeading({
+  eyebrow,
+  title,
+  icon: Icon,
+}: {
+  eyebrow: string;
+  title: string;
+  icon: LucideIcon;
+}) {
   return (
-    <motion.p
-      {...reveal}
-      className="text-xs font-medium uppercase tracking-[0.22em] text-champagne"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: EASE }}
+      className="mb-14"
     >
-      {children}
-    </motion.p>
+      <div className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-[#86868b]">
+        <Icon size={14} strokeWidth={1.75} />
+        {eyebrow}
+      </div>
+      <h2 className="text-3xl font-semibold tracking-tight text-[#f5f5f7] md:text-5xl">
+        {title}
+      </h2>
+    </motion.div>
   );
 }
 
-function Tag({ children }: { children: ReactNode }) {
+function Chip({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-muted">
+    <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm text-[#c7c7cc] transition-colors hover:border-white/25 hover:text-[#f5f5f7]">
       {children}
     </span>
+  );
+}
+
+function CursorSpotlight() {
+  const mx = useMotionValue(-600);
+  const my = useMotionValue(-600);
+  const sx = useSpring(mx, { stiffness: 120, damping: 22, mass: 0.6 });
+  const sy = useSpring(my, { stiffness: 120, damping: 22, mass: 0.6 });
+  const background = useMotionTemplate`radial-gradient(600px circle at ${sx}px ${sy}px, rgba(245,245,247,0.06), transparent 70%)`;
+
+  useEffect(() => {
+    const move = (e: globalThis.MouseEvent) => {
+      mx.set(e.clientX);
+      my.set(e.clientY);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [mx, my]);
+
+  return (
+    <motion.div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-0"
+      style={{ background }}
+    />
   );
 }
 
@@ -174,453 +309,442 @@ function Navbar() {
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-5 z-50 flex justify-center px-4"
+      transition={{ duration: 0.7, ease: EASE }}
+      className="sticky top-4 z-50 mx-auto w-full max-w-6xl px-4 md:px-6"
     >
       <nav
         aria-label="Primary"
-        className="flex items-center gap-2 rounded-full border border-white/10 bg-[#101113]/70 py-1.5 pl-5 pr-1.5 shadow-[0_8px_40px_rgba(0,0,0,0.45)] backdrop-blur-md"
+        className="mx-auto flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#101113]/75 p-1.5 backdrop-blur-md [scrollbar-width:none]"
       >
-        <a
-          href="#about"
-          className="mr-2 text-sm font-semibold tracking-[0.2em] text-foreground"
-        >
-          EM
-        </a>
-        <ul className="hidden items-center sm:flex">
-          {nav.slice(0, 3).map((n) => (
-            <li key={n.href}>
-              <a
-                href={n.href}
-                className="rounded-full px-4 py-2 text-sm text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground"
-              >
-                {n.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a
-          href="#contact"
-          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
-        >
-          Contact
-        </a>
+        {nav.map((n) => (
+          <a
+            key={n.href}
+            href={n.href}
+            className="whitespace-nowrap rounded-full px-3.5 py-2 text-sm text-[#86868b] transition-colors hover:bg-white/[0.07] hover:text-[#f5f5f7]"
+          >
+            {n.label}
+          </a>
+        ))}
       </nav>
     </motion.header>
   );
 }
 
-function Hero() {
-  const x = useMotionValue(-600);
-  const y = useMotionValue(-600);
-  const spot = useMotionTemplate`radial-gradient(520px circle at ${x}px ${y}px, rgba(232,226,214,0.10), transparent 70%)`;
-
-  function onMove(e: MouseEvent<HTMLElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set(e.clientX - r.left);
-    y.set(e.clientY - r.top);
-  }
-
-  return (
-    <section
-      id="about"
-      onMouseMove={onMove}
-      className="relative isolate overflow-hidden"
-    >
-      <div aria-hidden className="bg-grid absolute inset-0 -z-20" />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{ background: spot }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-[#e8e2d6]/[0.05] blur-[120px]"
-      />
-
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="mx-auto max-w-6xl px-6 pb-28 pt-40 md:pb-36 md:pt-52"
-      >
-        <motion.div variants={fadeUp}>
-          <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-muted backdrop-blur">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-champagne opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-champagne" />
-            </span>
-            Available for Security Advisory &amp; Ventures
-            <span className="text-white/20">•</span>
-            <span className="inline-flex items-center gap-1">
-              <MapPin size={13} aria-hidden /> Baku
-            </span>
-          </span>
-        </motion.div>
-
-        <motion.h1
-          variants={fadeUp}
-          className="mt-8 text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl lg:text-8xl"
-        >
-          <span className="bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
-            ELSHAN MAMMADOV
-          </span>
-        </motion.h1>
-
-        <motion.p
-          variants={fadeUp}
-          className="mt-6 text-2xl font-medium tracking-tight text-champagne md:text-4xl"
-        >
-          Security Researcher &amp; Tech Founder
-        </motion.p>
-
-        <motion.p
-          variants={fadeUp}
-          className="mt-8 max-w-2xl text-lg leading-relaxed text-muted md:text-xl"
-        >
-          Focused on offensive web security, vulnerability research, and
-          building scalable, technology-driven ventures in Baku.
-        </motion.p>
-
-        <motion.div variants={fadeUp} className="mt-12 flex flex-wrap gap-3">
-          <motion.a
-            href="#contact"
-            whileHover={{ y: -2, scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background"
-          >
-            Get in touch
-            <ArrowRight
-              size={16}
-              className="transition-transform group-hover:translate-x-1"
-              aria-hidden
-            />
-          </motion.a>
-          <motion.a
-            href={GITHUB}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ y: -2, scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium transition-colors hover:border-white/25 hover:bg-white/[0.08]"
-          >
-            GitHub <ArrowUpRight size={16} aria-hidden />
-          </motion.a>
-          <motion.a
-            href={LINKEDIN}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ y: -2, scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium transition-colors hover:border-white/25 hover:bg-white/[0.08]"
-          >
-            LinkedIn <ArrowUpRight size={16} aria-hidden />
-          </motion.a>
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-}
-
-function Ventures() {
-  return (
-    <section
-      id="ventures"
-      className="mx-auto max-w-6xl scroll-mt-20 px-6 py-24 md:py-32"
-    >
-      <Eyebrow>Ventures &amp; Leadership</Eyebrow>
-      <motion.h2
-        {...reveal}
-        className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight md:text-5xl"
-      >
-        Building and securing things that matter.
-      </motion.h2>
-
-      <div className="mt-14 grid gap-4 md:grid-cols-3 md:grid-rows-2">
-        {ventures.map((v, i) => {
-          const Icon = v.icon;
-          return (
-            <SpotlightCard key={v.name} className={v.className} delay={i * 0.08}>
-              <div
-                className={`flex h-full flex-col p-8 ${v.featured ? "md:p-12" : ""}`}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-champagne">
-                    <Icon size={20} aria-hidden />
-                  </span>
-                  <ArrowUpRight
-                    size={18}
-                    className="text-white/20 transition-colors group-hover:text-champagne"
-                    aria-hidden
-                  />
-                </div>
-                <div className={v.featured ? "mt-auto pt-24" : "mt-10"}>
-                  <h3
-                    className={`font-semibold tracking-tight ${v.featured ? "text-3xl md:text-4xl" : "text-xl"}`}
-                  >
-                    {v.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm text-champagne">{v.role}</p>
-                  <p
-                    className={`mt-5 leading-relaxed text-muted ${v.featured ? "max-w-md text-base" : "text-sm"}`}
-                  >
-                    {v.text}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {v.tags.map((t) => (
-                      <Tag key={t}>{t}</Tag>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </SpotlightCard>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function Research() {
-  return (
-    <section
-      id="research"
-      className="mx-auto max-w-6xl scroll-mt-20 px-6 py-24 md:py-32"
-    >
-      <Eyebrow>Security Research &amp; Engineering</Eyebrow>
-      <motion.h2
-        {...reveal}
-        className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight md:text-5xl"
-      >
-        Research that ships, tooling that scales.
-      </motion.h2>
-
-      <div className="mt-14 grid gap-4 md:grid-cols-2">
-        <motion.a
-          {...reveal}
-          href={WPSCAN}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ y: -4 }}
-          className="group relative block overflow-hidden rounded-2xl border border-white/[0.07] bg-[#131417] p-8 transition-colors hover:border-champagne/40 md:col-span-2 md:p-10"
-        >
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-start gap-5">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-champagne">
-                <Bug size={20} aria-hidden />
-              </span>
-              <div>
-                <h3 className="text-xl font-semibold tracking-tight md:text-2xl">
-                  Vulnerability Disclosure
-                </h3>
-                <p className="mt-2 max-w-xl leading-relaxed text-muted">
-                  Published WordPress plugin security advisory on WPScan.
-                </p>
-                <p className="mt-4 inline-block rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-xs text-muted">
-                  119477bd-1b29-4e33-9040-38cb6f0ae623
-                </p>
-              </div>
-            </div>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-champagne">
-              View advisory
-              <ArrowUpRight
-                size={18}
-                className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden
-              />
-            </span>
-          </div>
-        </motion.a>
-
-        <motion.div
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.08 }}
-          whileHover={{ y: -4 }}
-          className="rounded-2xl border border-white/[0.07] bg-[#131417] p-8 transition-colors hover:border-white/20 md:p-10"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-champagne">
-            <Terminal size={20} aria-hidden />
-          </span>
-          <h3 className="mt-8 text-xl font-semibold tracking-tight md:text-2xl">
-            Custom Security Tooling
-          </h3>
-          <p className="mt-2 leading-relaxed text-muted">
-            Automated static analysis and vulnerability discovery tools built
-            with Python, Semgrep, and Node.js.
-          </p>
-          <ul className="mt-6 space-y-2">
-            {tools.map((t) => (
-              <li key={t}>
-                <a
-                  href={GITHUB}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/row flex items-center justify-between rounded-lg border border-white/[0.07] bg-white/[0.02] px-4 py-3 transition-colors hover:border-champagne/40 hover:bg-white/[0.05]"
-                >
-                  <span className="flex items-center gap-3 font-mono text-sm">
-                    <Radar size={15} className="text-champagne" aria-hidden />
-                    {t}
-                  </span>
-                  <ArrowUpRight
-                    size={16}
-                    className="text-white/25 transition-all group-hover/row:-translate-y-0.5 group-hover/row:translate-x-0.5 group-hover/row:text-champagne"
-                    aria-hidden
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-
-        <motion.div
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.16 }}
-          whileHover={{ y: -4 }}
-          className="rounded-2xl border border-white/[0.07] bg-[#131417] p-8 transition-colors hover:border-white/20 md:p-10"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-champagne">
-            <Layers size={20} aria-hidden />
-          </span>
-          <h3 className="mt-8 text-xl font-semibold tracking-tight md:text-2xl">
-            Technical Stack
-          </h3>
-          <p className="mt-2 leading-relaxed text-muted">
-            Daily drivers across offensive security and product engineering.
-          </p>
-          <motion.ul
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            className="mt-6 flex flex-wrap gap-2"
-          >
-            {stack.map((s) => (
-              <motion.li
-                key={s}
-                variants={fadeUp}
-                whileHover={{ y: -2, scale: 1.05 }}
-                className="cursor-default rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-foreground/90 transition-colors hover:border-champagne/50 hover:text-champagne"
-              >
-                {s}
-              </motion.li>
-            ))}
-          </motion.ul>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function MagneticButton({
+function ButtonLink({
   href,
   children,
-  external,
+  primary = false,
 }: {
   href: string;
   children: ReactNode;
-  external?: boolean;
+  primary?: boolean;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const x = useSpring(mx, { stiffness: 220, damping: 16, mass: 0.2 });
-  const y = useSpring(my, { stiffness: 220, damping: 16, mass: 0.2 });
-
-  function onMove(e: MouseEvent<HTMLAnchorElement>) {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    mx.set((e.clientX - (r.left + r.width / 2)) * 0.3);
-    my.set((e.clientY - (r.top + r.height / 2)) * 0.3);
-  }
-
+  const external = href.startsWith("http");
   return (
     <motion.a
-      ref={ref}
       href={href}
-      {...(external
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : undefined)}
-      style={{ x, y }}
-      onMouseMove={onMove}
-      onMouseLeave={() => {
-        mx.set(0);
-        my.set(0);
-      }}
-      whileTap={{ scale: 0.96 }}
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-7 py-3.5 text-sm font-medium transition-colors first:border-transparent first:bg-foreground first:text-background hover:border-white/25"
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      whileHover={{ y: -2, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors ${
+        primary
+          ? "bg-[#f5f5f7] text-[#101113] hover:bg-white"
+          : "border border-white/15 text-[#f5f5f7] hover:border-white/30 hover:bg-white/[0.05]"
+      }`}
     >
       {children}
     </motion.a>
   );
 }
 
-function Contact() {
-  return (
-    <section
-      id="contact"
-      className="mx-auto max-w-6xl scroll-mt-20 px-6 py-24 md:py-32"
-    >
-      <motion.div
-        {...reveal}
-        className="relative isolate overflow-hidden rounded-3xl border border-white/10 bg-[#131417] px-8 py-20 text-center md:px-16 md:py-28"
-      >
-        <div aria-hidden className="bg-grid absolute inset-0 -z-20 opacity-60" />
-        <div
-          aria-hidden
-          className="absolute left-1/2 top-0 -z-10 h-72 w-[640px] -translate-x-1/2 rounded-full bg-[#e8e2d6]/[0.09] blur-[110px]"
-        />
-        <p className="text-xs font-medium uppercase tracking-[0.22em] text-champagne">
-          Contact
-        </p>
-        <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl">
-          Let&apos;s build something secure.
-        </h2>
-        <p className="mx-auto mt-6 max-w-xl text-lg text-muted">
-          Open to security engagements and conversations about new ventures.
-        </p>
-        <div className="mt-12 flex flex-wrap justify-center gap-4">
-          <MagneticButton href={LINKEDIN} external>
-            <Mail size={16} aria-hidden /> Message on LinkedIn
-          </MagneticButton>
-          <MagneticButton href={GITHUB} external>
-            <Building2 size={16} aria-hidden /> GitHub
-            <ArrowUpRight size={16} aria-hidden />
-          </MagneticButton>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
 export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
-      <Navbar />
-      <main className="flex-1">
-        <Hero />
-        <Ventures />
-        <Research />
-        <Contact />
-      </main>
-      <footer className="border-t border-white/[0.07]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Elshan Mammadov • Baku, Azerbaijan</p>
-          <p className="flex flex-wrap gap-x-6 gap-y-2">
-            <a
-              href={GITHUB}
-              className="transition-colors hover:text-foreground"
+      <div className="relative min-h-screen overflow-x-clip bg-[#101113] text-[#f5f5f7]">
+        <CursorSpotlight />
+        <Navbar />
+
+        {/* HERO */}
+        <section
+          id="about"
+          className="relative z-10 scroll-mt-24 px-6 pb-24 pt-24 md:pb-32 md:pt-32"
+        >
+          <div
+            aria-hidden
+            className="bg-dots pointer-events-none absolute inset-x-0 -top-24 h-[760px]"
+          />
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="relative mx-auto max-w-6xl"
+          >
+            <motion.div
+              variants={fadeUp}
+              className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#c7c7cc]"
             >
-              github.com/elshanmammadoov
-            </a>
-            <a
-              href={LINKEDIN}
-              className="transition-colors hover:text-foreground"
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8e2d6] opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e8e2d6]" />
+              </span>
+              <MapPin size={14} strokeWidth={1.75} className="text-[#86868b]" />
+              Baku, Azerbaijan • Open to Security Advisory & Ventures
+            </motion.div>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-10 text-sm font-medium tracking-[0.35em] text-[#86868b]"
             >
-              linkedin.com/in/elshanmammadoov
-            </a>
-          </p>
-        </div>
-      </footer>
+              ELSHAN MAMMADOV
+            </motion.p>
+
+            <motion.h1
+              variants={fadeUp}
+              className="mt-5 max-w-5xl bg-gradient-to-b from-[#f5f5f7] to-[#9a9aa0] bg-clip-text text-5xl font-semibold leading-[1.05] tracking-tight text-transparent md:text-7xl"
+            >
+              Red Team Specialist & Vulnerability Researcher
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-8 max-w-3xl text-lg leading-relaxed text-[#86868b] md:text-xl"
+            >
+              Entrepreneur & Security Researcher focused on offensive web
+              security, AI automation, and building technology-driven ventures
+              in Baku.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-10 flex flex-wrap items-center gap-3"
+            >
+              <ButtonLink href={GITHUB} primary>
+                <Terminal size={16} /> GitHub
+              </ButtonLink>
+              <ButtonLink href={LINKEDIN}>
+                <Briefcase size={16} /> LinkedIn
+              </ButtonLink>
+              <ButtonLink href="#contact">
+                <Mail size={16} /> Contact <ArrowRight size={16} />
+              </ButtonLink>
+            </motion.div>
+          </motion.div>
+
+          {/* Featured disclosure */}
+          <div className="relative mx-auto mt-20 max-w-6xl md:mt-28">
+            <SpotlightCard accent="214,70,92" innerClassName="overflow-hidden">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[#b3243d]/20 blur-3xl"
+              />
+              <div className="relative grid gap-10 p-8 md:grid-cols-[1.6fr_1fr] md:p-14">
+                <div>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[#d6465c]/30 bg-[#d6465c]/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.14em] text-[#f0a3af]">
+                    <ShieldAlert size={14} />
+                    VULNERABILITY DISCLOSURE • WPSCAN DATABASE
+                  </span>
+                  <h2 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl">
+                    CVE-2026-118783
+                  </h2>
+                  <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#86868b]">
+                    Discovered, validated, and responsibly disclosed a WordPress
+                    plugin security vulnerability with full Proof-of-Concept
+                    (PoC), published in the WPScan Vulnerability Database.
+                  </p>
+                  <a
+                    href={WPSCAN}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-6 py-3 text-sm font-medium text-[#101113] transition-transform hover:scale-[1.03]"
+                  >
+                    View on WPScan <ArrowUpRight size={16} />
+                  </a>
+                </div>
+                <div className="flex items-center justify-center">
+                  <div className="relative flex h-44 w-44 items-center justify-center rounded-full border border-[#d6465c]/25 md:h-56 md:w-56">
+                    <div className="absolute inset-4 rounded-full border border-white/10" />
+                    <div className="absolute inset-9 rounded-full border border-white/5" />
+                    <Bug
+                      size={56}
+                      strokeWidth={1.25}
+                      className="text-[#e7b7be]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </SpotlightCard>
+          </div>
+        </section>
+
+        {/* EXPERIENCE */}
+        <section
+          id="experience"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+        >
+          <SectionHeading
+            eyebrow="Ventures & Experience"
+            title="Building and securing, in parallel."
+            icon={Briefcase}
+          />
+          <div className="grid gap-5 md:grid-cols-6">
+            {experience.map((e, i) => (
+              <SpotlightCard
+                key={e.name}
+                className={e.className}
+                delay={(i % 2) * 0.1}
+                innerClassName="p-8 md:p-10"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+                    <e.icon size={22} strokeWidth={1.5} />
+                  </div>
+                  <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#86868b]">
+                    {e.period}
+                  </span>
+                </div>
+                <h3 className="mt-8 text-2xl font-semibold tracking-tight">
+                  {e.name}
+                </h3>
+                <p className="mt-1 text-sm font-medium text-[#c7c7cc]">
+                  {e.role}
+                </p>
+                <p className="mt-4 leading-relaxed text-[#86868b]">{e.text}</p>
+                {e.link && (
+                  <a
+                    href={e.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-1.5 text-sm text-[#f5f5f7] underline-offset-4 hover:underline"
+                  >
+                    {e.link.label} <ArrowUpRight size={14} />
+                  </a>
+                )}
+              </SpotlightCard>
+            ))}
+          </div>
+        </section>
+
+        {/* PROJECTS & RESEARCH */}
+        <section
+          id="projects"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+        >
+          <SectionHeading
+            eyebrow="Security Engineering & AI"
+            title="Projects & Research"
+            icon={Cpu}
+          />
+          <div className="grid gap-5 md:grid-cols-2">
+            <SpotlightCard innerClassName="p-8 md:p-10">
+              <Radar size={26} strokeWidth={1.5} />
+              <h3 className="mt-8 text-2xl font-semibold tracking-tight">
+                AI Vehicle Speed & Traffic Radar
+              </h3>
+              <p className="mt-4 leading-relaxed text-[#86868b]">
+                Real-time computer vision system built with Python, OpenCV,
+                YOLOv8, and NumPy featuring perspective/camera-angle
+                calibration, real-world distance calculation, and live speed
+                estimation (km/h).
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["Python", "OpenCV", "YOLOv8", "NumPy"].map((t) => (
+                  <Chip key={t}>{t}</Chip>
+                ))}
+              </div>
+            </SpotlightCard>
+
+            <SpotlightCard delay={0.1} innerClassName="p-8 md:p-10">
+              <Wrench size={26} strokeWidth={1.5} />
+              <h3 className="mt-8 text-2xl font-semibold tracking-tight">
+                Custom Offensive Security Tooling
+              </h3>
+              <p className="mt-4 leading-relaxed text-[#86868b]">
+                {tools.join(", ")} — automated static analysis, vulnerability
+                discovery, and exploitation workflows built with Python,
+                Semgrep, Node.js, and Bash.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {tools.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-sm text-[#c7c7cc]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </SpotlightCard>
+
+            <SpotlightCard
+              className="md:col-span-2"
+              delay={0.05}
+              innerClassName="p-8 md:p-10"
+            >
+              <div className="flex items-center gap-3">
+                <ShieldCheck size={26} strokeWidth={1.5} />
+                <h3 className="text-2xl font-semibold tracking-tight">
+                  Core Security Domains & Stack
+                </h3>
+              </div>
+              <div className="mt-8 grid gap-10 md:grid-cols-3">
+                <div>
+                  <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#86868b]">
+                    Domains
+                  </p>
+                  <ul className="space-y-3 text-[#c7c7cc]">
+                    {domains.map((d) => (
+                      <li key={d} className="flex gap-3 leading-snug">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[#86868b]" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#86868b]">
+                    Stack
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {stack.map((s) => (
+                      <Chip key={s}>{s}</Chip>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#86868b]">
+                    Active on
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {platforms.map((p) => (
+                      <Chip key={p}>{p}</Chip>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </SpotlightCard>
+          </div>
+        </section>
+
+        {/* CREDENTIALS */}
+        <section
+          id="credentials"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+        >
+          <SectionHeading
+            eyebrow="Education, Certifications & Volunteering"
+            title="Credentials"
+            icon={Award}
+          />
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {education.map((e, i) => (
+              <SpotlightCard
+                key={e.name}
+                delay={i * 0.08}
+                innerClassName="p-8"
+              >
+                <e.icon size={24} strokeWidth={1.5} />
+                <h3 className="mt-6 text-lg font-semibold tracking-tight">
+                  {e.name}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#c7c7cc]">
+                  {e.role}
+                </p>
+                <p className="mt-3 text-sm text-[#86868b]">{e.period}</p>
+              </SpotlightCard>
+            ))}
+          </div>
+
+          <motion.h3
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mb-6 mt-16 text-xs font-medium uppercase tracking-[0.22em] text-[#86868b]"
+          >
+            Licenses & Certifications — 7 Verified Credentials
+          </motion.h3>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {certs.map((c, i) => (
+              <SpotlightCard
+                key={c.name}
+                delay={(i % 3) * 0.07}
+                innerClassName="p-6"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <BadgeCheck
+                    size={20}
+                    strokeWidth={1.5}
+                    className="shrink-0 text-[#e8e2d6]"
+                  />
+                  <span className="text-xs text-[#86868b]">{c.date}</span>
+                </div>
+                <h4 className="mt-4 font-medium leading-snug">{c.name}</h4>
+                <p className="mt-1 text-sm text-[#86868b]">{c.issuer}</p>
+                {c.id && (
+                  <p className="mt-4 break-all font-mono text-xs text-[#6b6b70]">
+                    ID: {c.id}
+                  </p>
+                )}
+              </SpotlightCard>
+            ))}
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section
+          id="contact"
+          className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+        >
+          <SpotlightCard innerClassName="overflow-hidden">
+            <div
+              aria-hidden
+              className="bg-dots pointer-events-none absolute inset-0 opacity-60"
+            />
+            <div className="relative px-8 py-16 text-center md:px-16 md:py-24">
+              <h2 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl">
+                Let&apos;s build something secure.
+              </h2>
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#86868b]">
+                Open to security engagements, responsible disclosure
+                discussions, and venture partnerships.
+              </p>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+                <ButtonLink href={LINKEDIN} primary>
+                  <Briefcase size={16} /> Reach out on LinkedIn
+                </ButtonLink>
+                <ButtonLink href={GITHUB}>
+                  <Terminal size={16} /> GitHub
+                </ButtonLink>
+              </div>
+            </div>
+          </SpotlightCard>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="relative z-10 border-t border-[#1c1d21] px-6 py-12">
+          <div className="mx-auto flex max-w-6xl flex-col gap-6 text-sm text-[#86868b] md:flex-row md:items-center md:justify-between">
+            <p>© 2026 Elshan Mammadov • Baku, Azerbaijan</p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              {[
+                ["bingoapp.az", "https://bingoapp.az"],
+                ["qarabaghestate.az", "https://qarabaghestate.az"],
+                ["github.com/elshanmammadoov", GITHUB],
+                ["linkedin.com/in/elshanmammadoov", LINKEDIN],
+              ].map(([label, href]) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-[#f5f5f7]"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </footer>
+      </div>
     </MotionConfig>
   );
 }
